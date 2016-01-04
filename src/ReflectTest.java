@@ -1,5 +1,4 @@
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 
 /**
  * Created by wangxing on 2015/12/20.
@@ -23,7 +22,7 @@ public class ReflectTest {
         System.out.println(c1 == c4);
     }
 
-    public static void test2() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static void test2() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException {
         Class c = Class.forName("Person");
         Constructor[] cons = c.getDeclaredConstructors();
         for (Constructor con : cons) {
@@ -49,12 +48,32 @@ public class ReflectTest {
         con = c.getConstructor(String.class, int.class, String.class);
         System.out.println(con);
         System.out.println(con.newInstance("wangsingx", 24, "chengdu"));
+        System.out.println();
+
+        Field[] fields = c.getDeclaredFields();
+        for (Field field : fields) {
+            System.out.println(field);
+        }
+        Field field = c.getField("address");
+        System.out.println(field);
+        field.set(o, "chongqing");
+        System.out.println(o);
+        System.out.println();
+
+        Method[] methods = c.getMethods();
+        for (Method method : methods) {
+            System.out.println(method);
+        }
+        System.out.println();
+        Method method = c.getMethod("method", String.class);
+        method.invoke(o, "hello");
+
     }
 
     public static void main(String[] args) {
         try {
             test2();
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+        } catch (NoSuchFieldException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
     }
